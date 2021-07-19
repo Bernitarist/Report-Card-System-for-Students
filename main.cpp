@@ -6,15 +6,24 @@ using namespace std;
 
 class STUDENT {
 public:
+	void readData() {
+
+	}
+
+	int regNoRet() {
+		return regNo;
+	}
 
 
 private:
 
 };
 
-
+STUDENT obj;
 void resultsMenu();
 void classResults();
+void reportCard();
+bool isReportCard();
 
 
 int main() {
@@ -75,6 +84,7 @@ void resultsMenu() {
 		classResults();
 		break;
 	case 2:
+		reportCard();
 		break;
 	case 3:
 		main();
@@ -99,12 +109,60 @@ void classResults() {
 
 	}
 	/*else {
+	*   cout << "\033[2J\033[1;1H";
+	*   cout << "--------------------------------------------------------\n\n";
+		cout << "                       CLASS RESULTS \n\n";
+		cout << "--------------------------------------------------------\n\n";
 		while (IFobj.read(reinterpret_cast<char*>(&obj), sizeof(STUDENT)))
 		{
 
 		}
 	}*/
 	IFobj.close();
-
-
 }
+
+void reportCard() {
+
+	int regNo;
+	cout << "\033[2J\033[1;1H";
+	cout << "--------------------------------------------------------\n\n";
+	cout << "                   STUDENT REPORT CARD\n\n";
+	cout << "--------------------------------------------------------\n\n";
+
+	cout << "\tEnter the Student's Registration Number:\n";
+
+	cin >> regNo;
+	bool status = isReportCard();
+	if(status){ 
+		reportCard(regNo);
+	}
+	
+}
+
+bool isReportCard() {
+
+	ifstream IFobj("Report Card.dat");
+	if (IFobj) {
+		return true;
+	}
+	else {
+		cout << "\t\t\tFILE CANNOT BE FOUND!\n\n";
+	}
+	IFobj.close();
+}
+
+void reportCard(const int &x) {
+
+	ifstream IFobj("Report Card.dat");
+	while (IFobj.read(reinterpret_cast<char*>(&obj), sizeof(STUDENT))) {
+
+		if (obj.regNoret() == x) {
+			cout << "\033[2J\033[1;1H";
+			obj.readData();
+		}
+	}
+	IFobj.close();
+	
+}
+
+
