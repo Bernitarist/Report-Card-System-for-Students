@@ -31,6 +31,23 @@ public:
 		cout << "Grade " << grade << endl;		
 	}
 
+	void dataInput() {
+
+		cout << "Enter the student's Registration no: \n";
+		cin >> regNo;
+		cout << "Enter the student's Name: \n";
+		cin.ignore();
+		getline(cin, name);
+		cout << "Enter the following marks out of 100:\n ";
+		cout << "\nMathematics - "; cin >> m;
+		cout << "\nEnglish - "; cin >> e;
+		cout << "\nKiswahili - "; cin >> k;
+		cout << "\nPhysics - "; cin >> p;
+		cout << "\nBiology - "; cin >> b;
+		cout << "\nChemistry - "; cin >> c;
+		cout << "\nHistory - "; cin >> h;
+	}
+
 	void table() {
 
 		cout << regNo << " " << name << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << total << " " << ave << " " << grade << " " << endl;
@@ -50,8 +67,7 @@ void dispAll();
 bool isReportCard(const int& x);
 int regNoRet();
 void calculate();
-void tableResults();
-void dataInput();
+
 
 
 int main() {
@@ -244,7 +260,11 @@ void entryMenu() {
 }
 
 void createRecord() {
-	dataInput();
+
+	ofstream OFobj("Class results.txt");
+	obj.dataInput();
+	OFobj.write((char*) &obj, sizeof(STUDENT));			//Write without overwriting prev data
+
 	int back;
 	cout << "\n\n\t\tStudent information succesfully added!\n" << "\t\tPress 1 to add a student or 0 to go back to the main menu...\n";
 	cin >> back;
@@ -285,39 +305,6 @@ bool isReportCard(const int &x) {
 	ifstream IFobj("Report Card.txt");
 	if (IFobj)
 		return true;
-}
-
-
-void dataInput() {
-	int regNo;
-	string name;
-	int m, e, k, p, c, b, h;
-	int total;
-	float ave;
-	char grade;
-
-	cout << "Enter the student's Registration no: \n";
-	cin >> regNo;
-	cout << "Enter the student's Name: \n";
-	cin.ignore();
-	getline(cin, name);
-	cout << "Enter the following marks out of 100:\n ";
-	cout << "\nMathematics - "; cin >> m;
-	cout << "\nEnglish - "; cin >> e;
-	cout << "\nKiswahili - "; cin >> k;
-	cout << "\nPhysics - "; cin >> p;
-	cout << "\nBiology - "; cin >> b;
-	cout << "\nChemistry - "; cin >> c;
-	cout << "\nHistory - "; cin >> h;
-
-	ofstream OFobj("Report card.txt");
-	OFobj << regNo << name << m  << e  << k << p << b << c << h;
-	OFobj.close();
-}
-
-
-void tableResults() {
-
 }
 
 void calculate() {
