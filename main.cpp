@@ -15,20 +15,21 @@ class STUDENT {
 public:
 
 	void dataInput() {
-
-		cout << "Enter the student's Registration no: \n";
-		cin >> regNo;
-		cout << "Enter the student's Name: \n";
-		cin.ignore();
-		getline(cin, name);
-		cout << "Enter the following marks out of 100:\n ";
-		cout << "\nMathematics - "; cin >> m;
-		cout << "\nEnglish - "; cin >> e;
-		cout << "\nKiswahili - "; cin >> k;
-		cout << "\nPhysics - "; cin >> p;
-		cout << "\nChemistry - "; cin >> c;
-		cout << "\nBiology - "; cin >> b;
-		cout << "\nHistory - "; cin >> h;
+		
+			cout << "Enter the student's Registration no: \n";
+			cin >> regNo;
+			cout << "Enter the student's Name: \n";
+			cin.ignore();
+			getline(cin, name);
+			cout << "Enter the following marks out of 100:\n ";
+			cout << "\nMathematics - "; cin >> m;
+			cout << "\nEnglish - "; cin >> e;
+			cout << "\nKiswahili - "; cin >> k;
+			cout << "\nPhysics - "; cin >> p;
+			cout << "\nChemistry - "; cin >> c;
+			cout << "\nBiology - "; cin >> b;
+			cout << "\nHistory - "; cin >> h;
+		
 	}
 
 	void dataOutput() {
@@ -113,6 +114,7 @@ void resultsMenu() {
 		reportCard();
 		break;
 	case 3:
+		cout << "\033[2J\033[1;1H";
 		main();
 	}
 
@@ -130,7 +132,7 @@ void classResults() {
 		cout << "\t\tPress 0 to go back to the main menu";
 		cin >> z;
 		if (z == 0) {
-			cout << endl << endl;
+			cout << "\033[2J\033[1;1H";
 			main();
 		}
 
@@ -253,17 +255,24 @@ void entryMenu() {
 void createRecord() {
 
 	int back;
+
 	ofstream OFobj("Report card.dat");
 	obj.dataInput();
-	OFobj.write(reinterpret_cast<char*> (&obj), sizeof(STUDENT));		
+	OFobj.write(reinterpret_cast<char*> (&obj), sizeof(STUDENT));	
 	OFobj.close();
 
-	cout << "\n\nStudent information succesfully added!\n" << "Press 0 to go back to the main menu...\n";
+	cout << "\n\nStudent information succesfully added!\n" << "Press 1 to add a student or 0 to go back to the main menu...\n";
 	cin >> back;
-	if (back == 0)
-		cout << "\033[2J\033[1;1H";
-		main();
-	
+
+		switch (back) {
+		case 0:
+			cout << "\033[2J\033[1;1H";
+			main();
+			break;
+		case 1:
+			cout << "\033[2J\033[1;1H";
+			createRecord();
+		}	
 }
 
 
