@@ -5,6 +5,8 @@
 using namespace std;
 
 class STUDENT {
+	int regNo;
+
 public:
 	void readData() {
 
@@ -24,6 +26,7 @@ void resultsMenu();
 void classResults();
 void reportCard();
 bool isReportCard();
+void viewReportCard(const int& x);
 
 
 int main() {
@@ -124,6 +127,7 @@ void classResults() {
 void reportCard() {
 
 	int regNo;
+	char ch;
 	cout << "\033[2J\033[1;1H";
 	cout << "--------------------------------------------------------\n\n";
 	cout << "                   STUDENT REPORT CARD\n\n";
@@ -134,7 +138,19 @@ void reportCard() {
 	cin >> regNo;
 	bool status = isReportCard();
 	if(status){ 
-		reportCard(regNo);
+		viewReportCard(regNo);
+	}
+	
+	cout << "\n\n\t\tDo you want to view another student's report?\n"
+		<< "\t\tPress (Y) - Yes     (N) - No\n";
+	cin >> ch;
+
+	if (ch == 'Y' || ch=='y') {
+		reportCard();
+	}
+	if (ch == 'N' || ch=='n') {
+		cout << "\033[2J\033[1;1H";
+		main();
 	}
 	
 }
@@ -151,12 +167,12 @@ bool isReportCard() {
 	IFobj.close();
 }
 
-void reportCard(const int &x) {
+void viewReportCard(const int &x) {
 
 	ifstream IFobj("Report Card.dat");
 	while (IFobj.read(reinterpret_cast<char*>(&obj), sizeof(STUDENT))) {
 
-		if (obj.regNoret() == x) {
+		if (obj.regNoRet() == x) {
 			cout << "\033[2J\033[1;1H";
 			obj.readData();
 		}
