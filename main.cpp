@@ -5,6 +5,41 @@
 
 using namespace std;
 
+class STUDENT {
+	int regNo;
+	string name;
+	int m, e, k, p, c, b, h;
+	int total;
+	float ave;
+	char grade;
+public:
+
+	void dataOutput() {
+
+		cout << "Student Registration number: " << regNo << endl;
+		cout << "Student Name: " << name << endl;
+		cout << "Mathematics: " << m << endl;
+		cout << "English: " << e << endl;
+		cout << "Kiswahili: " << k << endl;
+		cout << "Physics: " << p << endl;
+		cout << "Biology: " << b << endl;
+		cout << "Chemistry : " << c << endl;
+		cout << "History: " << h << endl;
+		calculate();
+		cout << "Total " << total << endl;
+		cout << "Average " << ave << endl;
+		cout << "Grade " << grade << endl;		
+	}
+
+	void table() {
+
+		cout << regNo << " " << name << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << total << " " << ave << " " << grade << " " << endl;
+	}
+	
+private:
+};
+
+STUDENT obj;
 
 void resultsMenu();
 void classResults();
@@ -13,7 +48,6 @@ void entryMenu();
 void createRecord();
 void dispAll();
 bool isReportCard(const int& x);
-void dataOutput();
 int regNoRet();
 void calculate();
 void tableResults();
@@ -91,6 +125,7 @@ void classResults() {
 	ifstream IFobj("Class Results.txt");
 
 	if (!IFobj) {
+
 		cout << "\n\t\tRESULTS NOT FOUND!\n";
 		cout << "\t\tPress 0 to go back to the main menu\n";
 		cin >> z;
@@ -98,28 +133,44 @@ void classResults() {
 			cout << "\033[2J\033[1;1H";
 			main();
 		}
-
 	}
-	/*else {
-	*   cout << "\033[2J\033[1;1H";
-	*   cout << "--------------------------------------------------------\n\n";
-		cout << "                       CLASS RESULTS \n\n";
-		cout << "--------------------------------------------------------\n\n";
-		while (IFobj)
-		{
+	else {
+	    cout << "\033[2J\033[1;1H";
+	    cout << "------------------------------------------------------------------------------\n\n";
+		cout << "                              CLASS RESULTS \n\n";
+		cout << "------------------------------------------------------------------------------\n\n";
+		cout << "Reg No  Name                               M  E  K  P  B  C  Total  Ave  Grade\n\n";
 
+		ifstream IFobj("Report Card.txt");
+		if (!IFobj) {
+			int press;
+			cout << "\n\t\tFILE COULD NOT BE FOUND!\n\n";
+			cout << "\t\tPress 0 to exit...\n\n";
+			cin >> press;
+			if (press == 0)
+				main();
 		}
-			cout << "\n\n\t\tDo you want to view more results?\n"
-		<< "\t\tPress (Y) - Yes     (N) - No\n";
-	cin >> ch;
 
-	if (ch == 'Y' || ch=='y') {
-		resultsMenu();
-	}
-	if (ch == 'N' || ch=='n') {
-		cout << "\033[2J\033[1;1H";
-		main();
-	}*/
+		int reg, m, e, k, p, b, c, total;
+		float ave;
+		char grade;
+		string name;
+		while (IFobj >>reg>>name>>m>>e>>k>>p>>b>>c>>total>>ave>>grade)
+		{
+			obj.table();			
+		}
+
+		cout << "\n\n\t\tDo you want to view more results?\n"
+		     << "\t\tPress (Y) - Yes     (N) - No\n";
+	    cin >> ch;
+
+		if (ch == 'Y' || ch=='y') {
+			resultsMenu();
+		}
+		if (ch == 'N' || ch=='n') {
+			cout << "\033[2J\033[1;1H";
+			main();
+		}
 	IFobj.close();
 }
 
@@ -236,36 +287,6 @@ bool isReportCard(const int &x) {
 		return true;
 }
 
-void dataOutput() {
-	int regNo;
-	string name;
-	int m, e, k, p, c, b, h;
-	int total;
-	float ave;
-	char grade;
-
-	ifstream IFobj("Report Card.txt");
-	if (!IFobj) {
-		cout << "\n\t\tFILE COULD NOT BE FOUND!\n\n";
-	}
-	
-		IFobj >> regNo >> name >> m >> e >> k >> p >> b >> c >> h >> total >> ave >> grade;
-			cout << "Student Registration number: " << regNo << endl;
-			cout << "Student Name: " << name << endl;
-			cout << "Mathematics: " << m << endl;
-			cout << "English: " << e << endl;
-			cout << "Kiswahili: " << k << endl;
-			cout << "Physics: " << p << endl;
-			cout << "Biology: " << b << endl;
-			cout << "Chemistry : " << c << endl;
-			cout << "History: " << h << endl;
-			calculate();
-			cout << "Total " << total << endl;
-			cout << "Average " << ave << endl;
-			cout << "Grade " << grade << endl;
-		
-	IFobj.close();
-}
 
 void dataInput() {
 	int regNo;
@@ -300,12 +321,7 @@ void tableResults() {
 }
 
 void calculate() {
-	int regNo;
-	string name;
-	int m, e, k, p, c, b, h;
-	int total;
-	float ave;
-	char grade;
+
 
 	total = m + e + k + p + b + c + h;
 	ave = total / 7.0;
