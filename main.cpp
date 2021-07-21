@@ -52,9 +52,15 @@ public:
 
 		cout << regNo << " " << name << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << total << " " << ave << " " << grade << " " << endl;
 	}
+
+	int regNoRet() {
+
+		return regNo;
+	}
 	
 private:
 };
+
 
 STUDENT obj;
 
@@ -63,11 +69,9 @@ void classResults();
 void reportCard();
 void entryMenu();
 void createRecord();
+void stdResult(const int& x);
 void dispAll();
-bool isReportCard(const int& x);
-int regNoRet();
 void calculate();
-
 
 
 int main() {
@@ -151,8 +155,8 @@ void classResults() {
 		}
 	}
 	else {
-	    cout << "\033[2J\033[1;1H";
-	    cout << "------------------------------------------------------------------------------\n\n";
+		cout << "\033[2J\033[1;1H";
+		cout << "------------------------------------------------------------------------------\n\n";
 		cout << "                              CLASS RESULTS \n\n";
 		cout << "------------------------------------------------------------------------------\n\n";
 		cout << "Reg No  Name                               M  E  K  P  B  C  Total  Ave  Grade\n\n";
@@ -171,42 +175,35 @@ void classResults() {
 		float ave;
 		char grade;
 		string name;
-		while (IFobj >>reg>>name>>m>>e>>k>>p>>b>>c>>total>>ave>>grade)
+		while (IFobj >> reg >> name >> m >> e >> k >> p >> b >> c >> total >> ave >> grade)
 		{
-			obj.table();			
+			obj.table();
 		}
 
 		cout << "\n\n\t\tDo you want to view more results?\n"
-		     << "\t\tPress (Y) - Yes     (N) - No\n";
-	    cin >> ch;
+			<< "\t\tPress (Y) - Yes     (N) - No\n";
+		cin >> ch;
 
-		if (ch == 'Y' || ch=='y') {
+		if (ch == 'Y' || ch == 'y') {
 			resultsMenu();
 		}
-		if (ch == 'N' || ch=='n') {
+		if (ch == 'N' || ch == 'n') {
 			cout << "\033[2J\033[1;1H";
 			main();
 		}
-	IFobj.close();
+		IFobj.close();
+	}
 }
 
 void reportCard() {
 
 	int regNo;
 	char ch;
+
 	cout << "\033[2J\033[1;1H";
-	cout << "--------------------------------------------------------\n\n";
-	cout << "                   STUDENT REPORT CARD\n\n";
-	cout << "--------------------------------------------------------\n\n";
-
 	cout << "\tEnter the Student's Registration Number:\n";
-
 	cin >> regNo;
-	bool status = isReportCard(regNo);
-	if (status) {
-		dataOutput();
-	}
-	
+	stdResult(regNo);
 		
 	cout << "\n\n\t\tDo you want to view another student's report?\n"
 		<< "\t\tPress (Y) - Yes     (N) - No\n";
@@ -219,6 +216,29 @@ void reportCard() {
 		cout << "\033[2J\033[1;1H";
 		main();
 	}	
+}
+
+void stdResult(const int &x) {
+	
+	ifstream IFobj("Class results.txt");
+	if (!IFobj) {
+		int exit;
+		cout << "\n\n\t\tFILE NOT FOUND!!"
+			<< "\n\t\tPress 0 to exit..." << endl;
+		cin >> exit;
+		if (exit == 0)
+			main();
+	}
+	
+	if (obj.regNoRet() == x) {
+
+		cout << "\033[2J\033[1;1H";
+		cout << "--------------------------------------------------------\n\n";
+		cout << "                   STUDENT REPORT CARD\n\n";
+		cout << "--------------------------------------------------------\n\n";
+
+		obj.dataOutput();
+	}
 }
 
 
@@ -282,29 +302,25 @@ void createRecord() {
 
 void dispAll() {
 
-	ifstream IFobj("Report card.txt");
+	ifstream IFobj("Class results.txt");
 	if (!IFobj) {
+		int exit;
 		cout << "\033[2J\033[1;1H";
 		cout << "\n\t\tFile cannot be found!!\n\n";
-		cout << endl << endl;
-		main();
+		cout << "\t\tPress 0 to exit...\n";
+		cin >> exit;
+		if(exit==0)
+			main();
 	}	
 
 	cout << "--------------------------------------------------------\n\n";
-	cout << "                    STUDENTS RECORDS\n\n";
+	cout << "                    ALL STUDENTS RECORDS\n\n";
 	cout << "--------------------------------------------------------\n\n";
-
-	for (int x = 1;x<=(IFobj.eof();x++) {
-
-		dataOutput();
-	}
 	
-}
-
-bool isReportCard(const int &x) {
-	ifstream IFobj("Report Card.txt");
-	if (IFobj)
-		return true;
+	for (int i = 1; i = (sizeof(STUDENT)) ;i++ ) {
+		obj.dataOutput();
+		cout << endl << endl;
+	}
 }
 
 void calculate() {
@@ -327,10 +343,7 @@ void calculate() {
 		grade = 'E';
 }
 
-int regNoRet() {
 
-	return regNoRet;
-}
 
 
 
