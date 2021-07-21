@@ -13,7 +13,6 @@ void accept(int total, float ave, char grade);
 void createRecord();
 void stdResult(const int& x);
 void dispAll();
-void writeValue(const int &reg, string name, const int &m, const int &e, const int &k, const int &p, const int &b, const int &c, const int &h,const int &total,const float &ave,char grade);
 
 class STUDENT {
 	int regNo;
@@ -61,9 +60,23 @@ public:
 
 	void dataInput() {
 
+		cout << "\n------------------------------------------------------------------------------------------------------------\n\n";
+		cout << "        Input the Registration number,Name and Marks out of 100. USE SPACEBAR to separate your inputs.\n\n";
+		cout << "-------------------------------------------------------------------------------------------------------------\n";
+		cout << "Press 0 to exit...\n";
+		cout << "Reg No. -  Name - Math - Eng - Kisw - Phy - Bio - Chem - Hist  \n";
+
 		
-		calculate();
-		writeValue(regNo,name,m,e,k,p,b,c,h,total,ave,grade);
+		ofstream OFobj("Class results.txt", ios::app);
+		int counter = 1;
+		 do{
+			 cin >> regNo >> name >> m >> e >> k >> p >> b >> c >> h;
+			 OFobj << regNo << name << m << e << k << p << b << c << h;
+			 counter++;
+		 } while (counter == 1);
+		OFobj.close();
+		//calculate();
+		
 	}
 
 	int regNoRet() {
@@ -242,6 +255,7 @@ void stdResult(const int &x) {
 
 void createRecord() {
 	
+	cout << "\033[2J\033[1;1H";
 	obj.dataInput();
 
 	int back;
@@ -257,12 +271,6 @@ void createRecord() {
 		cout << "\033[2J\033[1;1H";
 		createRecord();
 	}
-}
-
-void writeValue(const int& reg, string name, const int& m, const int& e, const int& k, const int& p, const int& b, const int& c, const int& h,const int& total, const float& ave, char grade) {
-	ofstream OFobj("Class results.txt", ios::app);
-	OFobj << reg << name << m << e << k << p << b << c << h <<total<<ave<<grade<< endl;
-	OFobj.close();
 }
 
 
