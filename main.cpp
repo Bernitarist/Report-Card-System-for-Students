@@ -1,5 +1,6 @@
 #include <iostream>
 #include <conio.h>
+#include <iomanip>
 #include <fstream>
 #include <string>
 
@@ -9,7 +10,6 @@ void resultsMenu();
 void classResults();
 void reportCard();
 void entryMenu();
-void accept(int total, float ave, char grade);
 void createRecord();
 void stdResult(const int& x);
 void dispAll();
@@ -18,15 +18,9 @@ class STUDENT {
 	int regNo;
 	string name;
 	int m, e, k, p, c, b, h;
-	int total;
-	float ave;
 	char grade;
-	void calculate() {
-
-
-		total = m + e + k + p + b + c + h;
-		ave = total / 7.0;
-
+	char decide(int total) {
+		
 		if (total >= 560)
 			grade = 'A+';
 		if (total >= 490 && total < 560)
@@ -39,6 +33,8 @@ class STUDENT {
 			grade = 'D';
 		if (total <= 280)
 			grade = 'E';
+
+		return grade;
 	}
 public:
 
@@ -53,8 +49,8 @@ public:
 		cout << "Biology: " << b << endl;
 		cout << "Chemistry : " << c << endl;
 		cout << "History: " << h << endl;
-		cout << "Total " << total << endl;
-		cout << "Average " << ave << endl;
+		//cout << "Total " << total << endl;
+		//cout << "Average " << ave << endl;
 		cout << "Grade " << grade << endl;		
 	}
 
@@ -69,14 +65,42 @@ public:
 		
 		ofstream OFobj("Class results.txt", ios::app);
 		int counter = 1;
+		string name1, name2;
 		 do{
-			 cin >> regNo >> name >> m >> e >> k >> p >> b >> c >> h;
-			 OFobj << regNo << name << m << e << k << p << b << c << h;
+			cin >> regNo >> name1>>name2 >> m >> e >> k >> p >> b >> c >> h;
+			OFobj << regNo << " " << name1<<" "<<name2 << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << h << endl;
 			 counter++;
 		 } while (counter == 1);
-		OFobj.close();
-		//calculate();
-		
+		OFobj.close();		
+	}
+
+	void table() {
+
+		ifstream IFobj("Class results.txt");
+
+		if (!IFobj) {
+			int z;
+			cout << "\n\t\tRESULTS NOT FOUND!\n";
+			cout << "\t\tPress 0 to exit...\n";
+			cin >> z;
+			if (z == 0) {
+				cout << "\033[2J\033[1;1H";
+				exit(0);
+			}
+		}
+
+		int an, bn, cn, dn, en, fn, gn,regNon;
+		string namen1,namen2;
+		while (IFobj >> regNon >> namen1>>namen2 >> an >> bn >> cn >> dn >> en >> fn >> gn) {
+			int total = an + bn + cn + dn + en + fn + gn;
+			float ave = total / 7.0;
+			grade = decide(total);
+			cout <<setw(4)<< regNon<<"    "<< namen1<<setw(10)<<namen2<<" " << setw(4)<< an<<setw(5) << bn << setw(6) << cn
+				<< setw(5) << dn << setw(5) << en << setw(6) << fn << setw(6) << gn << setw(7) << total<<"   " << setw(5) 
+				<< setprecision(4) << ave << setw(3) << grade << endl;
+			
+		}
+		IFobj.close();
 	}
 
 	int regNoRet() {
@@ -157,36 +181,15 @@ void resultsMenu() {
 
 void classResults() {
 	
-	ifstream IFobj("Class results.txt");
-
-	if (!IFobj) {
-		int z;
-		cout << "\n\t\tRESULTS NOT FOUND!\n";
-		cout << "\t\tPress 0 to go back to the main menu\n";
-		cin >> z;
-		if (z == 0) {
-			cout << "\033[2J\033[1;1H";
-			main();
-		}
-	}
 
 	char ch;	
 		cout << "\033[2J\033[1;1H";
 		cout << "------------------------------------------------------------------------------\n\n";
 		cout << "                              CLASS RESULTS \n\n";
 		cout << "------------------------------------------------------------------------------\n\n";
-		cout << "Reg No  Name                               M  E  K  P  B  C  H  Total  Ave  Grade\n\n";
+		cout << "Reg No  Name               Math  Eng  Kisw  Phy  Bio  Chem  Hist  Total  Ave  Grade\n\n";
 
-		int reg, m, e, k, p, b, c, h,total;
-		float ave;
-		string name;
-		char grade;
-
-		while (IFobj >> reg >> name >> m >> e >> k >> p >> b >> c >> h >> total >> ave >> grade) {
-
-			cout << reg << name << m << e << k << p << b << c << h << total << ave << grade << endl;
-		}
-		IFobj.close();
+		obj.table();
 
 		cout << "\n\n\t\tDo you want to view more results?\n"
 			<< "\t\tPress (Y) - Yes     (N) - No\n";
