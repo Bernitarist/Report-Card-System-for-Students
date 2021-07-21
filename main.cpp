@@ -5,6 +5,16 @@
 
 using namespace std;
 
+void resultsMenu();
+void classResults();
+void reportCard();
+void entryMenu();
+void accept(int total, float ave, char grade);
+void createRecord();
+void stdResult(const int& x);
+void dispAll();
+void writeValue(const int &reg, string name, const int &m, const int &e, const int &k, const int &p, const int &b, const int &c, const int &h,const int &total,const float &ave,char grade);
+
 class STUDENT {
 	int regNo;
 	string name;
@@ -12,6 +22,25 @@ class STUDENT {
 	int total;
 	float ave;
 	char grade;
+	void calculate() {
+
+
+		total = m + e + k + p + b + c + h;
+		ave = total / 7.0;
+
+		if (total >= 560)
+			grade = 'A+';
+		if (total >= 490 && total < 560)
+			grade = 'A';
+		if (total >= 420 && total < 490)
+			grade = 'B';
+		if (total >= 350 && total < 420)
+			grade = 'C';
+		if (total > 280 && total < 350)
+			grade = 'D';
+		if (total <= 280)
+			grade = 'E';
+	}
 public:
 
 	void dataOutput() {
@@ -25,7 +54,6 @@ public:
 		cout << "Biology: " << b << endl;
 		cout << "Chemistry : " << c << endl;
 		cout << "History: " << h << endl;
-		calculate();
 		cout << "Total " << total << endl;
 		cout << "Average " << ave << endl;
 		cout << "Grade " << grade << endl;		
@@ -33,24 +61,9 @@ public:
 
 	void dataInput() {
 
-		cout << "Enter the student's Registration no: \n";
-		cin >> regNo;
-		cout << "Enter the student's Name: \n";
-		cin.ignore();
-		getline(cin, name);
-		cout << "Enter the following marks out of 100:\n ";
-		cout << "\nMathematics - "; cin >> m;
-		cout << "\nEnglish - "; cin >> e;
-		cout << "\nKiswahili - "; cin >> k;
-		cout << "\nPhysics - "; cin >> p;
-		cout << "\nBiology - "; cin >> b;
-		cout << "\nChemistry - "; cin >> c;
-		cout << "\nHistory - "; cin >> h;
-	}
-
-	void table() {
-
-		cout << regNo << " " << name << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << total << " " << ave << " " << grade << " " << endl;
+		
+		calculate();
+		writeValue(regNo,name,m,e,k,p,b,c,h,total,ave,grade);
 	}
 
 	int regNoRet() {
@@ -63,15 +76,6 @@ private:
 
 
 STUDENT obj;
-
-void resultsMenu();
-void classResults();
-void reportCard();
-void entryMenu();
-void createRecord();
-void stdResult(const int& x);
-void dispAll();
-void calculate();
 
 
 int main() {
@@ -139,13 +143,11 @@ void resultsMenu() {
 }
 
 void classResults() {
-
-	int z;
-	char ch;
-	ifstream IFobj("Class Results.txt");
+	
+	ifstream IFobj("Class results.txt");
 
 	if (!IFobj) {
-
+		int z;
 		cout << "\n\t\tRESULTS NOT FOUND!\n";
 		cout << "\t\tPress 0 to go back to the main menu\n";
 		cin >> z;
@@ -154,31 +156,24 @@ void classResults() {
 			main();
 		}
 	}
-	else {
+
+	char ch;	
 		cout << "\033[2J\033[1;1H";
 		cout << "------------------------------------------------------------------------------\n\n";
 		cout << "                              CLASS RESULTS \n\n";
 		cout << "------------------------------------------------------------------------------\n\n";
-		cout << "Reg No  Name                               M  E  K  P  B  C  Total  Ave  Grade\n\n";
+		cout << "Reg No  Name                               M  E  K  P  B  C  H  Total  Ave  Grade\n\n";
 
-		ifstream IFobj("Report Card.txt");
-		if (!IFobj) {
-			int press;
-			cout << "\n\t\tFILE COULD NOT BE FOUND!\n\n";
-			cout << "\t\tPress 0 to exit...\n\n";
-			cin >> press;
-			if (press == 0)
-				main();
-		}
-
-		int reg, m, e, k, p, b, c, total;
+		int reg, m, e, k, p, b, c, h,total;
 		float ave;
-		char grade;
 		string name;
-		while (IFobj >> reg >> name >> m >> e >> k >> p >> b >> c >> total >> ave >> grade)
-		{
-			obj.table();
+		char grade;
+
+		while (IFobj >> reg >> name >> m >> e >> k >> p >> b >> c >> h >> total >> ave >> grade) {
+
+			cout << reg << name << m << e << k << p << b << c << h << total << ave << grade << endl;
 		}
+		IFobj.close();
 
 		cout << "\n\n\t\tDo you want to view more results?\n"
 			<< "\t\tPress (Y) - Yes     (N) - No\n";
@@ -190,9 +185,7 @@ void classResults() {
 		if (ch == 'N' || ch == 'n') {
 			cout << "\033[2J\033[1;1H";
 			main();
-		}
-		IFobj.close();
-	}
+		}	
 }
 
 void reportCard() {
@@ -229,16 +222,47 @@ void stdResult(const int &x) {
 		if (exit == 0)
 			main();
 	}
-	
-	if (obj.regNoRet() == x) {
+	int a, c, d, e, f, g, h, i;
+	float j;
+	char k;
+	string b;
+	while (IFobj >> a >> b >> c >> d >> e >> f >> g >> h >> i >> j >> k) {
+		if (obj.regNoRet() == x) {
 
-		cout << "\033[2J\033[1;1H";
-		cout << "--------------------------------------------------------\n\n";
-		cout << "                   STUDENT REPORT CARD\n\n";
-		cout << "--------------------------------------------------------\n\n";
+			cout << "\033[2J\033[1;1H";
+			cout << "--------------------------------------------------------\n\n";
+			cout << "                   STUDENT REPORT CARD\n\n";
+			cout << "--------------------------------------------------------\n\n";
 
-		obj.dataOutput();
+			obj.dataOutput();
+		}
 	}
+
+}
+
+void createRecord() {
+	
+	obj.dataInput();
+
+	int back;
+	cout << "\n\n\t\tStudent information succesfully added!\n" << "\t\tPress 1 to add a student or 0 to go back to the main menu...\n";
+	cin >> back;
+
+	switch (back) {
+	case 0:
+		cout << "\033[2J\033[1;1H";
+		main();
+		break;
+	case 1:
+		cout << "\033[2J\033[1;1H";
+		createRecord();
+	}
+}
+
+void writeValue(const int& reg, string name, const int& m, const int& e, const int& k, const int& p, const int& b, const int& c, const int& h,const int& total, const float& ave, char grade) {
+	ofstream OFobj("Class results.txt", ios::app);
+	OFobj << reg << name << m << e << k << p << b << c << h <<total<<ave<<grade<< endl;
+	OFobj.close();
 }
 
 
@@ -279,26 +303,7 @@ void entryMenu() {
 		}
 }
 
-void createRecord() {
 
-	ofstream OFobj("Class results.txt");
-	obj.dataInput();
-	OFobj.write((char*) &obj, sizeof(STUDENT));			//Write without overwriting prev data
-
-	int back;
-	cout << "\n\n\t\tStudent information succesfully added!\n" << "\t\tPress 1 to add a student or 0 to go back to the main menu...\n";
-	cin >> back;
-
-		switch (back) {
-		case 0:
-			cout << "\033[2J\033[1;1H";
-			main();
-			break;
-		case 1:
-			cout << "\033[2J\033[1;1H";
-			createRecord();
-		}	
-}
 
 void dispAll() {
 
@@ -317,31 +322,18 @@ void dispAll() {
 	cout << "                    ALL STUDENTS RECORDS\n\n";
 	cout << "--------------------------------------------------------\n\n";
 	
-	for (int i = 1; i = (sizeof(STUDENT)) ;i++ ) {
+	int a, c, d, e, f, g, h, i;
+	float j;
+	char k;
+	string b;
+	while (IFobj >>a>>b>>c>>d>>e>>f>>g>>h>>i>>j>>k) {
+		
 		obj.dataOutput();
-		cout << endl << endl;
 	}
+	IFobj.close();
 }
 
-void calculate() {
 
-
-	total = m + e + k + p + b + c + h;
-	ave = total / 7.0;
-
-	if (total >= 560)
-		grade = 'A+';
-	if (total >= 490 && total < 560)
-		grade = 'A';
-	if (total >= 420 && total < 490)
-		grade = 'B';
-	if (total >= 350 && total < 420)
-		grade = 'C';
-	if (total > 280 && total < 350)
-		grade = 'D';
-	if (total <= 280)
-		grade = 'E';
-}
 
 
 
