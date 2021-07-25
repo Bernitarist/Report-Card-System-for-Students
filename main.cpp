@@ -12,12 +12,11 @@ void reportCard();
 void entryMenu();
 void createRecord();
 void stdResult(const int& x);
-//void dispAll();
+void dispAll();
+void modify();
 
 class STUDENT {
-	int regNo;
-	string name;
-	int m, e, k, p, c, b, h;
+	
 	char grade;
 
 public:
@@ -26,6 +25,7 @@ public:
 
 		int total = m + e + k + p + b + c + h;
 		float ave = total / 7.0; 
+		
 		grade = decide(total);
 		cout << "Student Registration number: " << reg << endl;
 		cout << "Student Name: " << name1 <<" " << name2 << endl;
@@ -36,13 +36,16 @@ public:
 		cout << "Biology: " << b << endl;
 		cout << "Chemistry : " << c << endl;
 		cout << "History: " << h << endl;
-		cout << "\nTotal marks: " << total << endl;
-		cout << "Average: " <<ave << endl;
-		cout << "Grade " << grade << endl;		
+		cout << "\tTotal marks: " << total << endl;
+		cout << "\tAverage: " <<ave << endl;
+		cout << "\tGrade " << grade << endl;		
 	}
 
 	void dataInput() {
 
+		int regNo;
+		string name;
+		int m, e, k, p, c, b, h;
 		cout << "\n------------------------------------------------------------------------------------------------------------\n\n";
 		cout << "        Input the Registration number,Name and Marks out of 100. USE SPACEBAR to separate your inputs.\n\n";
 		cout << "-------------------------------------------------------------------------------------------------------------\n";
@@ -78,6 +81,7 @@ public:
 
 		int an, bn, cn, dn, en, fn, gn,regNon;
 		string namen1,namen2;
+		
 		while (IFobj >> regNon >> namen1>>namen2 >> an >> bn >> cn >> dn >> en >> fn >> gn) {
 			int total = an + bn + cn + dn + en + fn + gn;
 			float ave = total / 7.0;
@@ -91,7 +95,7 @@ public:
 	}
 
 	char decide(const int& total) {
-		char grade;
+		
 		if (total >= 560)
 			grade = 'A+';
 		if (total >= 490 && total < 560)
@@ -274,7 +278,6 @@ void createRecord() {
 	}
 }
 
-
 void entryMenu() {
 
 	int choice;
@@ -285,8 +288,8 @@ void entryMenu() {
 	cout << "--------------------------------------------------------\n\n";
 
 	cout << "Select your option: \n"
-		 << "\n\t\t1. CREATE STUDENT RECORD \n\t\t2. VIEW ALL STUDENTS RECORDS \n\t\t3. SEARCH STUDENT RECORD \n\t\t4. MODIFY STUDENT RECORD"
-		 << "\n\t\t5. DELETE STUDENT RECORD \n\t\t6. BACK\n\n";
+		 << "\n\t\t1. CREATE STUDENT RECORD \n\t\t2. VIEW ALL STUDENTS RECORDS \n\t\t3. MODIFY STUDENT RECORD"
+		 << "\n\t\t4. DELETE STUDENT RECORD \n\t\t5. BACK\n\n";
 		
 	cin >> choice;
 		switch (choice) {
@@ -297,22 +300,20 @@ void entryMenu() {
 				break;
 			case 2:
 				cout << "\033[2J\033[1;1H";
-				//dispAll();
+				dispAll();
 				break;
 			case 3:
+				cout << "\033[2J\033[1;1H";
+				modify();
 				break;
 			case 4:
 				break;
 			case 5:
-				break;
-			case 6:
 				cout << "\033[2J\033[1;1H";
 				main();
 				break;
 		}
 }
-
-
 
 void dispAll() {
 
@@ -331,15 +332,64 @@ void dispAll() {
 	cout << "                    ALL STUDENTS RECORDS\n\n";
 	cout << "--------------------------------------------------------\n\n";
 	
-	int a, c, d, e, f, g, h, i;
-	float j;
-	char k;
-	string b;
-	while (IFobj >>a>>b>>c>>d>>e>>f>>g>>h>>i>>j>>k) {
-		
-		obj.dataOutput();
+	int reg,m,e,k,p,b,c,h;
+	string name1,name2;
+	for (int x = 1; x <=sizeof(STUDENT) ;x++) {
+		while (IFobj >> reg >> name1 >> name2 >> m >> e >> k >> p >> b >> c >> h) {
+
+			obj.dataOutput(reg, name1, name2, m, e, k, p, b, c, h);
+			cout << endl;
+		}
 	}
 	IFobj.close();
+}
+
+void modify() {
+	
+	int reg,pos;
+	cout << "Enter the registration number of the student: " << endl;
+	cin >> reg;
+
+	ifstream IFobj("Class results.txt");
+	ofstream OFobj("Class results.txt");
+	if (!IFobj) {
+		int exit;
+		cout << "\033[2J\033[1;1H";
+		cout << "\n\t\tFile cannot be found!!\n\n";
+		cout << "\t\tPress 0 to exit...\n";
+		cin >> exit;
+		if (exit == 0)
+			main();
+	}
+	int regNo, m, e, k, p, b, c, h;
+	string name1, name2;
+	while (IFobj >> regNo >> name1 >> name2 >> m >> e >> k >> p >> b >> c >> h) {
+		if (regNo == reg){
+			obj.dataOutput(regNo, name1, name2, m, e, k, p, b, c, h);
+			pos = -1 * static_cast<int> (sizeof(obj));			
+			OFobj.seekp(pos,ios::cur);
+
+			cout << "Input the new data: \n";
+			cout << "use SPACEBAR to separate your data!";
+
+			int regNew, mNew, eNew, kNew, pNew, bNew, cNew, hNew;
+			string name1new, name2new;
+			while (cin >> regNew >> name1new >> name2new >> mNew >> eNew >> kNew >> pNew >> bNew >> cNew >> hNew) {
+				OFobj << regNo << " " << name1 << " " << name2 << " " << m << " " << e << " " << k << " " << p << " " << b << " " << c << " " << h << " ";
+			}
+			OFobj.close();
+			cout << "Student data succesfully updated!" << endl;
+		}
+		IFobj.close();
+	}
+	int exit;
+	cout << "\t\tPress 0 to exit...\n";
+	cin >> exit;
+	if (exit == 0) {
+		cout << "\033[2J\033[1;1H";
+		main();
+	}
+		
 }
 
 
